@@ -302,12 +302,15 @@
     linkOficial:  "https://mpago.la/2GswvEw",
 
     whatsapp: "522211530176",
+    // Grupo de WhatsApp de la masterclass: ahí se envía el boleto después de pagar.
+    grupo: "https://chat.whatsapp.com/Gp37dQePkgKCQpQXdtVKar",
 
     // LUGARES. Cada vez que Estrella CONFIRME un pago, agrega una línea aquí
     // (nombre + inicial del apellido, y fecha/hora del pago). El contador baja solo.
     cupo: 15,
     inscritas: [
       { nombre: "Lorena", fecha: "2026-11-10T07:00:00-06:00" },
+      { nombre: "Jascel", fecha: "2026-11-10T13:30:00-06:00" },
       // { nombre: "Leonel G.", fecha: "2026-11-10T13:30:00-06:00" },
     ],
     evento: { fecha: "Lunes 7 de diciembre de 2026", horario: "10:00 a 16:00 h", lugar: "Villahermosa, Tabasco" }
@@ -543,7 +546,7 @@
               <li>Al terminar, <b>guarda tu comprobante de Mercado Pago</b> (captura de pantalla o descarga).</li>
               <li><b>Regresa a esta página.</b> Mercado Pago no te trae de vuelta solo.</li>
               <li>Toca <b>"Ya pagué"</b> para generar tu boleto de la masterclass.</li>
-              <li>Envíame tu <b>boleto y tu comprobante</b> por WhatsApp y confirmo tu lugar.</li>
+              <li>Únete al <b>grupo de WhatsApp de la masterclass</b> y envía ahí tu <b>boleto y tu comprobante</b>. Con eso confirmo tu lugar.</li>
             </ol>
           </div>
           <div class="in" id="fNombre">
@@ -590,13 +593,14 @@
         <!-- Paso 3 -->
         <div class="paso" id="paso3">
           <h3>Tu boleto está listo, <span data-nombre-corto></span>.</h3>
-          <p class="muted">Último paso: mándame por WhatsApp <b style="color:var(--tinta)">este boleto y tu comprobante de Mercado Pago</b>. En cuanto verifique tu pago, te confirmo tu lugar.</p>
+          <p class="muted">Último paso: únete al grupo de WhatsApp de la masterclass y envía ahí <b style="color:var(--tinta)">este boleto y tu comprobante de Mercado Pago</b>. En cuanto verifique tu pago, confirmo tu lugar.</p>
           <img class="voucher-img" id="voucherImg" alt="Boleto de la masterclass">
           <div class="acciones">
-            <a class="pill full wa-btn" id="btnWa" href="#" target="_blank" rel="noopener">Enviar boleto a Estrella por WhatsApp</a>
+            <a class="pill full wa-btn" id="btnGrupo" href="#" target="_blank" rel="noopener">1. Unirme al grupo</a>
+            <a class="pill full wa-btn" id="btnWa" href="#" target="_blank" rel="noopener">2. Enviar mi boleto al grupo</a>
             <button class="pill full blanca" id="btnGuardar" style="border:1px solid var(--linea);display:none">Guardar boleto</button>
           </div>
-          <p class="legal" id="waTip">Al tocar el botón verde, elige <b>WhatsApp</b> y el chat de <b>Estrella</b> (+52 221 153 0176). Tu boleto se adjunta como imagen.</p>
+          <p class="legal" id="waTip">Primero únete al grupo. Después toca el botón 2, elige <b>WhatsApp</b> y el <b>grupo de la masterclass</b>. Tu boleto se adjunta como imagen.</p>
           <div class="alerta" id="waAviso" style="display:none"></div>
           <button class="link" id="nuevo" style="margin-top:10px;font-size:15px">Registrar a otra persona</button>
         </div>
@@ -615,7 +619,7 @@
       <details><summary>¿Dónde es y a qué hora?</summary><p>En Villahermosa, Tabasco, el lunes 7 de diciembre de 2026, de 10:00 a 16:00 h. Al confirmar tu pago te mando por WhatsApp la dirección y lo que necesitas llevar.</p></details>
       <details><summary>¿Cuántos lugares hay?</summary><p>15 lugares. El contador de esta página baja conforme confirmo cada pago.</p></details>
       <details><summary>¿Hay rifas?</summary><p>Sí. Durante la masterclass rifamos regalos entre todas las asistentes.</p></details>
-      <details><summary>¿Qué pasa después de pagar?</summary><p>Guarda tu comprobante de Mercado Pago, regresa a esta página y toca "Ya pagué" para generar tu boleto. Me mandas los dos por WhatsApp y, en cuanto verifico tu pago, te confirmo tu lugar.</p></details>
+      <details><summary>¿Qué pasa después de pagar?</summary><p>Guarda tu comprobante de Mercado Pago, regresa a esta página y toca "Ya pagué" para generar tu boleto. Te unes al grupo de WhatsApp de la masterclass, envías ahí los dos y, en cuanto verifico tu pago, confirmo tu lugar.</p></details>
     </div>
   </div>
 </section>
@@ -821,18 +825,19 @@
     $("#voucherImg").src = cv.toDataURL("image/png");
     cv.toBlob(b => { voucherBlob = b; }, "image/png");
     waMsg =
-      `Hola Estrella, ya pagué mi lugar en la Masterclass de Depilación con Cera.\n\n` +
+      `Hola, ya pagué mi lugar en la Masterclass de Depilación con Cera.\n\n` +
       `Nombre: ${reg.nombre}\nCelular: ${reg.cel}\nFolio: ${reg.folio}\nMonto: $${fmt(reg.monto)} MXN (${reg.tipo})\n\n` +
       `Te mando mi boleto y mi comprobante de Mercado Pago para que confirmes mi lugar.`;
-    $("#btnWa").href = waLink(waMsg);
+    $("#btnWa").href = CONFIG.grupo;
+    $("#btnGrupo").href = CONFIG.grupo;
     voucherFolio = reg.folio;
   }
   let waMsg = "", voucherFolio = "";
 
   /* ---------- Enviar el boleto (imagen) por WhatsApp ----------
-     1) Celular con "compartir archivos": abre el menú de compartir con la imagen adjunta -> WhatsApp -> Estrella.
-     2) Si no se puede: copia la imagen y abre el chat de Estrella para pegarla.
-     3) Si tampoco: guarda la imagen y abre el chat para adjuntarla. */
+     1) Celular con "compartir archivos": abre el menú de compartir con la imagen adjunta -> WhatsApp -> grupo de la masterclass.
+     2) Si no se puede: copia la imagen y abre el grupo para pegarla.
+     3) Si tampoco: guarda la imagen y abre el grupo para adjuntarla. */
   function archivoBoleto(){
     return voucherBlob ? new File([voucherBlob], "boleto-" + (voucherFolio || "masterclass") + ".png", { type:"image/png" }) : null;
   }
@@ -842,15 +847,15 @@
     if (puedeCompartir()){
       e.preventDefault();
       navigator.share({ files:[archivoBoleto()], text: waMsg, title:"Boleto Masterclass de Cera" })
-        .then(() => avisoWa("<b>¡Enviado!</b> Si no lo mandaste al chat de Estrella, vuelve a tocar el botón."))
+        .then(() => avisoWa("<b>¡Enviado!</b> Si no lo mandaste al grupo de la masterclass, vuelve a tocar el botón 2. No olvides enviar también tu comprobante de Mercado Pago."))
         .catch(err => { if (err && err.name === "AbortError") return; fallbackWa(); });
       return;
     }
     // Sin compartir archivos: copiar imagen y dejar que el enlace abra WhatsApp
     copiarImagen().then(ok => {
       avisoWa(ok
-        ? "<b>Tu boleto ya está copiado.</b> En el chat de Estrella, mantén presionado el cuadro de texto y toca <b>Pegar</b> para adjuntarlo. Luego adjunta también tu comprobante de Mercado Pago."
-        : "En el chat de Estrella toca el clip 📎 y <b>adjunta tu boleto</b> (guárdalo con el botón de abajo o con captura de pantalla) y tu comprobante de Mercado Pago.");
+        ? "<b>Tu boleto ya está copiado.</b> En el grupo de la masterclass, mantén presionado el cuadro de texto y toca <b>Pegar</b> para adjuntarlo. Luego adjunta también tu comprobante de Mercado Pago."
+        : "En el grupo de la masterclass toca el clip 📎 y <b>adjunta tu boleto</b> (guárdalo con el botón de abajo o con captura de pantalla) y tu comprobante de Mercado Pago.");
     });
   });
   async function copiarImagen(){
@@ -861,9 +866,9 @@
     } catch(e){ return false; }
   }
   function fallbackWa(){
-    const a = document.createElement("a"); a.href = waLink(waMsg); a.target = "_blank"; a.rel = "noopener";
+    const a = document.createElement("a"); a.href = CONFIG.grupo; a.target = "_blank"; a.rel = "noopener";
     document.body.appendChild(a); a.click(); a.remove();
-    avisoWa("En el chat de Estrella toca el clip 📎 y <b>adjunta tu boleto</b> y tu comprobante de Mercado Pago.");
+    avisoWa("En el grupo de la masterclass toca el clip 📎 y <b>adjunta tu boleto</b> y tu comprobante de Mercado Pago.");
   }
 
   // Guardar: capacidad de descargas dentro de Claude, o descarga normal si la página está en otro hosting
