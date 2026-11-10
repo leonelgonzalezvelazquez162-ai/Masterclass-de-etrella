@@ -510,7 +510,6 @@
     <div class="cupo rv">
       <div class="n">Quedan <b data-quedan>15</b> de <span data-cupo>15</span> lugares</div>
       <div class="barra"><i id="barra"></i></div>
-      <div class="quien" id="quien"></div>
     </div>
 
     <div class="insc-grid">
@@ -546,7 +545,7 @@
               <li>Al terminar, <b>guarda tu comprobante de Mercado Pago</b> (captura de pantalla o descarga).</li>
               <li><b>Regresa a esta página.</b> Mercado Pago no te trae de vuelta solo.</li>
               <li>Toca <b>"Ya pagué"</b> para generar tu boleto de la masterclass.</li>
-              <li>Únete al <b>grupo de WhatsApp de la masterclass</b> y envía ahí tu <b>boleto y tu comprobante</b>. Con eso confirmo tu lugar.</li>
+              <li>Envía tu <b>boleto y tu comprobante</b> al <b>grupo de WhatsApp de la masterclass</b>. Con eso confirmo tu lugar.</li>
             </ol>
           </div>
           <div class="in" id="fNombre">
@@ -593,14 +592,13 @@
         <!-- Paso 3 -->
         <div class="paso" id="paso3">
           <h3>Tu boleto está listo, <span data-nombre-corto></span>.</h3>
-          <p class="muted">Último paso: únete al grupo de WhatsApp de la masterclass y envía ahí <b style="color:var(--tinta)">este boleto y tu comprobante de Mercado Pago</b>. En cuanto verifique tu pago, confirmo tu lugar.</p>
+          <p class="muted">Último paso: envía <b style="color:var(--tinta)">este boleto y tu comprobante de Mercado Pago</b> al grupo de WhatsApp de la masterclass. En cuanto verifique tu pago, confirmo tu lugar.</p>
           <img class="voucher-img" id="voucherImg" alt="Boleto de la masterclass">
           <div class="acciones">
-            <a class="pill full wa-btn" id="btnGrupo" href="#" target="_blank" rel="noopener">1. Unirme al grupo</a>
-            <a class="pill full wa-btn" id="btnWa" href="#" target="_blank" rel="noopener">2. Enviar mi boleto al grupo</a>
+            <a class="pill full wa-btn" id="btnWa" href="#" target="_blank" rel="noopener">Enviar mi boleto al grupo</a>
             <button class="pill full blanca" id="btnGuardar" style="border:1px solid var(--linea);display:none">Guardar boleto</button>
           </div>
-          <p class="legal" id="waTip">Primero únete al grupo. Después toca el botón 2, elige <b>WhatsApp</b> y el <b>grupo de la masterclass</b>. Tu boleto se adjunta como imagen.</p>
+          <p class="legal" id="waTip">Al tocar el botón verde, elige <b>WhatsApp</b> y el <b>grupo de la masterclass</b>. Tu boleto se adjunta como imagen.</p>
           <div class="alerta" id="waAviso" style="display:none"></div>
           <button class="link" id="nuevo" style="margin-top:10px;font-size:15px">Registrar a otra persona</button>
         </div>
@@ -619,7 +617,7 @@
       <details><summary>¿Dónde es y a qué hora?</summary><p>En Villahermosa, Tabasco, el lunes 7 de diciembre de 2026, de 10:00 a 16:00 h. Al confirmar tu pago te mando por WhatsApp la dirección y lo que necesitas llevar.</p></details>
       <details><summary>¿Cuántos lugares hay?</summary><p>15 lugares. El contador de esta página baja conforme confirmo cada pago.</p></details>
       <details><summary>¿Hay rifas?</summary><p>Sí. Durante la masterclass rifamos regalos entre todas las asistentes.</p></details>
-      <details><summary>¿Qué pasa después de pagar?</summary><p>Guarda tu comprobante de Mercado Pago, regresa a esta página y toca "Ya pagué" para generar tu boleto. Te unes al grupo de WhatsApp de la masterclass, envías ahí los dos y, en cuanto verifico tu pago, confirmo tu lugar.</p></details>
+      <details><summary>¿Qué pasa después de pagar?</summary><p>Guarda tu comprobante de Mercado Pago, regresa a esta página y toca "Ya pagué" para generar tu boleto. Envías los dos al grupo de WhatsApp de la masterclass y, en cuanto verifico tu pago, confirmo tu lugar.</p></details>
     </div>
   </div>
 </section>
@@ -829,7 +827,6 @@
       `Nombre: ${reg.nombre}\nCelular: ${reg.cel}\nFolio: ${reg.folio}\nMonto: $${fmt(reg.monto)} MXN (${reg.tipo})\n\n` +
       `Te mando mi boleto y mi comprobante de Mercado Pago para que confirmes mi lugar.`;
     $("#btnWa").href = CONFIG.grupo;
-    $("#btnGrupo").href = CONFIG.grupo;
     voucherFolio = reg.folio;
   }
   let waMsg = "", voucherFolio = "";
@@ -847,7 +844,7 @@
     if (puedeCompartir()){
       e.preventDefault();
       navigator.share({ files:[archivoBoleto()], text: waMsg, title:"Boleto Masterclass de Cera" })
-        .then(() => avisoWa("<b>¡Enviado!</b> Si no lo mandaste al grupo de la masterclass, vuelve a tocar el botón 2. No olvides enviar también tu comprobante de Mercado Pago."))
+        .then(() => avisoWa("<b>¡Enviado!</b> Si no lo mandaste al grupo de la masterclass, vuelve a tocar el botón. No olvides enviar también tu comprobante de Mercado Pago."))
         .catch(err => { if (err && err.name === "AbortError") return; fallbackWa(); });
       return;
     }
@@ -896,10 +893,6 @@
     $$("[data-quedan-txt]").forEach(el => el.textContent = q === 0 ? "Cupo lleno" : (q === 1 ? "1 lugar" : q + " lugares"));
     document.body.classList.toggle("is-full", q === 0);
     $("#barra").style.width = (inscritas.length / CONFIG.cupo * 100) + "%";
-    const nombres = inscritas.slice(0,4).map(i => "<b>" + esc(i.nombre) + "</b>");
-    $("#quien").innerHTML = inscritas.length
-      ? "Ya aseguraron su lugar: " + nombres.join(", ") + (inscritas.length > 4 ? " y " + (inscritas.length - 4) + " más" : "")
-      : "Sé de las primeras en asegurar tu lugar.";
   }
   function esc(t){ const d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
   function hace(iso){
